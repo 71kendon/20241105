@@ -57,28 +57,53 @@ void setUpPinModes()
   pinMode(22,OUTPUT);
 }
 
-void handleRoot(AsyncAbstractResponse *request)
+void handleRoot(AsyncWebServerRequest *request)
 {
   request->send(200,"text/html",htmlHomePage);
 }
 
-void handleNotFound(AsyncAbstractResponse *request)
+void handleNotFound(AsyncWebServerRequest *request)
 {
   request->send(404,"text/plain","File Not Found");
 }
 
+void onCarInputWebSocketEvent(AsyncWebSocket *server,
+                              AsyncWebSocketClient *client, 
+                              AwsEventType type,
+                              void *arg, 
+                              uint8_t *data,
+                              size_t len)
+{
+  switch(type)
+  {
+    case WS_EVT_CONNECT:
+      Serial.printf("WebSocket client #%u connected from %s\n", client->id(), client->remoteIP().toString().c_str());
+    break;
+    case WS_EVT_DISCONNECT:
+      Serial.printf("WebSocket client #%u disconnected\n", client->id());
+    break;
+    case WS_EVT_DATA:
+      
+    break;
+    case WS_EVT_PONG:
+    case WS_EVT_ERROR: 
+    break;
+    default:
+    break;
+  }
+}
 
 
 void setup() {
   setUpPinModes();
   Serial.begin(115200);
 
-  WiFi.softAP(ssid,password);
+  WiFi.softAP(ssid, password);
   IPAddress IP = WiFi.softAPIP();
   Serial.print("AP IP address:");
   Serial.println(IP);
 
-  server.on("/",HTTP_GET,handleRoot);
+  server.on("/", HTTP_GET, handleRoot);
   server.onNotFound(handleNotFound);
 
   wsCarInput.onEvent(onCarInputWebSocketEvent);
