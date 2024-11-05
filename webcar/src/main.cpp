@@ -21,8 +21,8 @@ const int PWMFreq = 1000; //1khz
 const int PWMResolution = 8;
 const int PWMSpeedChannel = 4;
 
-const char* ssid = "tsungmin-iot-car";
-const char* password = "123456789";
+const char* ssid = "tsai";
+const char* password = "11111111";
 
 AsyncWebServer server(80);
 AsyncWebSocket wsCarInput("/CarInput");
