@@ -335,6 +335,6 @@ void setup() {
 }
 
 void loop() {
-
+wsCarInput.cleanupClients();    // 清指令
 }
 
